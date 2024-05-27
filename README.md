@@ -2,8 +2,8 @@
 
 # Grupp 12
 # Nora Velde
-# Saina Firooz
 # Sebastian Heynes
+# Saina Firooz
 
 ## Objective
 In this assignment, you will containerize a Django application, deploy it using Kubernetes (Minikube), and set up GitHub Actions to automate testing. 
