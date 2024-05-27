@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-project-deployment
+  labels:
+    app: blog-project
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: blog-project
+  template:
+    metadata:
+      labels:
+        app: blog-project
+    spec:
+      containers:
+      - name: blog-project
+        image: blog-project:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
