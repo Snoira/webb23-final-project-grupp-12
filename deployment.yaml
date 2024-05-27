@@ -5,7 +5,7 @@ metadata:
   labels:
     app: blog-project
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: blog-project
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: blog-project
-        image: blog-project:latest
+        image: snoira/blog-project:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
