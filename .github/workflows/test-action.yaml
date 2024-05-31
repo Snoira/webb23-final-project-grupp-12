@@ -1,6 +1,9 @@
 name: Test Action Workflow
 
-on: [pull_request]
+on:
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -18,13 +21,52 @@ jobs:
           - 5432:5432
     steps:
       - uses: actions/checkout@v4
-      - name: Install Python
-        run: |
-          pipx install poetry --python python3.10
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.10
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
-      - name: Run Tests
+      - name: Wait for PostgreSQL to start
+        run: |
+          until PGPASSWORD=postgres psql -h localhost -U postgres -c '\q'; do
+            sleep 1
+          done
+      - name: Run Migrations
         run: |
           python blog_project/manage.py migrate
+      - name: Run Tests
+        run: |
           python blog_project/manage.py test
+
+# name: Test Action Workflow
+
+# on: [pull_request]
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     strategy:
+#       max-parallel: 4
+#     services:
+#       db:
+#         image: postgres
+#         env:
+#           POSTGRES_USER: postgres
+#           POSTGRES_PASSWORD: postgres
+#           POSTGRES_DB: django_db
+#         ports:
+#           - 5432:5432
+#     steps:
+#       - uses: actions/checkout@v4
+#       - name: Install Python
+#         run: |
+#           pipx install poetry --python python3.10
+#       - name: Install Dependencies
+#         run: |
+#           pip install -r requirements.txt
+#       - name: Run Tests
+#         run: |
+#           python blog_project/manage.py migrate
+#           python blog_project/manage.py test
